@@ -1,0 +1,31 @@
+# This compose file extends docker-compose.yml with test specific services and settings
+version: "3.7"
+
+services:
+  web:
+    build:
+      target: dev
+    volumes:
+      - ./web/public:/home/node/public
+      - ./web/src:/home/node/src
+      - ./web/package.json:/home/node/package.json
+    depends_on:
+      - server
+    ports:
+      - "3002:3000"
+
+  server:
+    build:
+      target: build
+    volumes:
+      - ./server/src:/home/node/src
+      - ./server/package.json:/home/node/package.json
+      - ./server/babel.config.js:/home/node/babel.config.js
+      - ./server/.env:/home/node/.env
+      - ./server/.env.example:/home/node/.env.example
+    environment:
+      - LOGLEVEL=debug
+      - MONGODB_URI=mongodb://db/server-dev
+      - CORS_ORIGIN=http://localhost:3002
+    depends_on:
+      - db

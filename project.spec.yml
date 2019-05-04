@@ -1,0 +1,112 @@
+project:
+  name: user-admin
+  version: 0.0.0
+  web:
+    favicon:
+      favicon.ico
+    dependencies:
+      []
+  server:
+    dependencies:
+      []
+auth:
+  allowed_roles:
+    - admin
+    - manager
+    - user
+deployment:
+  dev:
+    server:
+      heroku_key: >-
+        changeme
+      target: heroku
+      app_name: user-admin-dev
+    web:
+      target: s3
+      bucket_name: user-admin-dev.thestartupfactory.tech
+      aws_region: eu-west-2
+      aws_access_key: >-
+         changeme
+      aws_access_secret_key: >-
+         changeme
+  demo:
+    server:
+      target: heroku
+      app_name: user-admin-demo
+    web:
+      target: s3
+      bucket_name: user-admin-demo.thestartupfactory.tech
+      aws_region: eu-west-2
+  staging:
+    server:
+      target: heroku
+      app_name: user-admin-staging
+      aws_access_key: >-
+       changeme
+      aws_access_secret_key: >-
+       changeme
+    web:
+      target: s3
+      bucket_name: user-admin-staging.thestartupfactory.tech
+      aws_region: eu-west-2
+  prod:
+    server:
+      target: heroku
+      app_name: user-admin-prod
+    web:
+      target: s3
+      bucket_name: www.user-admin.com
+      aws_region: eu-west-2
+entities:
+  - name: user
+    volume: 100
+    fields:
+      - name: email
+        type: email
+        unique: true
+      - name: name
+        type: string
+    auth:
+      roles:
+        - admin
+    actions:
+      - name: create
+        fields:
+          - username
+          - password
+          - roles
+          - email
+          - name
+      - name: list
+        fields:
+          - email
+          - name
+          - roles
+      - name: update
+        fields:
+          - email
+          - name
+          - roles
+      - name: destroy
+      - name: show
+        fields:
+          - username
+          - email
+          - name
+          - roles
+    operations:
+      []
+workflows:
+  - name: admin-create-new-user
+    weight: 1
+    roles:
+      - tc_admin
+    actions:
+      - create.auth
+      - pause.3
+      - list.user
+      - list.user
+      - create.user
+      - view.user
+extensions:
+  []

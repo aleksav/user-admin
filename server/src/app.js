@@ -1,0 +1,34 @@
+
+import http from 'http'
+import config, { env, mongo, port, ip } from './config'
+import mongoose from './services/mongoose'
+import express from './services/express'
+import routes from './routes'
+import logger from './services/logger'
+import { user_model } from './entities/user/model'
+
+
+const app = express(routes, config)
+const server = http.createServer(app)
+
+mongoose.connect(mongo.uri)
+mongoose.Promise = Promise
+
+user_model.countDocuments()
+.then(userCnt => {
+  if(userCnt == 0){
+    console.log('No users in the database, creating admin...')
+    return user_model.create({username: "admin", name:"Admin Admin", password: "admin", email: "admin@user-admin.com", roles:["admin"]})
+  }else{
+    console.log(`Found ${userCnt} users in the database...`)
+  }
+})
+
+
+setImmediate(() => {
+  server.listen(port, ip, () => {
+    logger.info('user-admin Express server listening on http://%s:%d, in %s mode', ip, port, env)
+  })
+})
+
+export default app

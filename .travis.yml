@@ -1,0 +1,39 @@
+# sudo: required
+# env:
+#   global:
+#     - secure: changeme
+#     - secure: changeme
+#     - secure: changeme
+# language: node_js
+# node_js:
+# - '8'
+# services:
+# - docker
+# before_install:
+#   - sudo rm /usr/local/bin/docker-compose
+#   - curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > docker-compose
+#   - chmod +x docker-compose
+#   - sudo mv docker-compose /usr/local/bin
+#   - pip install --user awscli
+#   - export PATH=$PATH:$HOME/.local/bin  
+# script:
+# - echo "Building against branch [${TRAVIS_BRANCH}]" &&
+#   docker-compose -f generator.docker.compose.yml run --user='root' gen chown -R node:node . &&
+#   docker-compose -f generator.docker.compose.yml run gen &&
+#   docker-compose -f docker-compose.yml -f docker-compose.test.yml --project-name user-admin build &&
+#   docker image ls &&
+#   if [ "${TRAVIS_BRANCH}" == "develop" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+#     echo 'Running performance tests' &&
+#     docker-compose -f docker-compose.yml -f docker-compose.test.yml --project-name user-admin run load_test &&
+#     echo 'Logging to heroku docker registry...' &&
+#     echo ${HEROKU_AUTH_KEY} | docker login -u "_" --password-stdin registry.heroku.com &&
+#     echo 'Tagging docker image...' &&
+#     docker tag user-admin_server:latest registry.heroku.com/user-admin-dev/web:latest &&
+#     echo 'Pushing docker image...' &&
+#     docker push registry.heroku.com/user-admin-dev/web &&
+#     echo 'Deploying heroku dyno...' &&
+#     sh heroku_deploy.sh "user-admin-dev" &&
+#     echo 'Deploying front end assets to s3...' &&
+#     . ./scripts/s3-deploy.sh s3://user-admin-dev.thestartupfactory.tech https://user-admin-dev.herokuapp.com/api &&
+#     echo 'Deployment completed.';
+#   fi

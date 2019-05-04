@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+
+  state:
+    image: hashicorp/terraform:light
+    working_dir: /terraform/scripts 
+    volumes:
+      - ./terraform-state-s3/:/terraform/scripts/
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+  terraform-dev:
+    image: hashicorp/terraform:light
+    working_dir: /terraform/scripts 
+    volumes:
+      - ./web-assets-01-dev/:/terraform/scripts/
+      - ./modules/:/terraform/modules/
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+  terraform-demo:
+    image: hashicorp/terraform:light
+    working_dir: /terraform/scripts 
+    volumes:
+      - ./web-assets-02-demo/:/terraform/scripts/
+      - ./modules/:/terraform/modules/
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+  terraform-staging:
+    image: hashicorp/terraform:light
+    working_dir: /terraform/scripts 
+    volumes:
+      - ./web-assets-03-staging/:/terraform/scripts/
+      - ./modules/:/terraform/modules/
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+  terraform-prod:
+    image: hashicorp/terraform:light
+    working_dir: /terraform/scripts 
+    volumes:
+      - ./web-assets-04-prod/:/terraform/scripts/
+      - ./modules/:/terraform/modules/
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY

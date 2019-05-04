@@ -1,0 +1,15 @@
+# This compose file extends docker-compose.yml with test specific services and settings
+version: "3.7"
+
+services:
+
+  load_test:
+    build:
+      context: ./load_test
+    volumes:
+      - ./load_test/tests:/opt/gating/user-files
+      - ./load_test/results:/opt/gatling/results
+    environment:
+      - JAVA_OPTS=-Dbaseurl=http://server:3001/api -Dduration=1 -Dmagnitude=1
+    depends_on:
+      - server
