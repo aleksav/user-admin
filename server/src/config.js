@@ -30,9 +30,10 @@ const config = {
     appUrl: process.env.APP_URL || 'localhost:3002',
     masterKey: requireProcessEnv('MASTER_KEY'),
     jwtSecret: requireProcessEnv('JWT_SECRET'),
-    corsOrigin: requireProcessEnv('CORS_ORIGIN'),
-    serviceEmailUser: requireProcessEnv('SERVICE_EMAIL_USER'),
-    serviceEmailPassword: requireProcessEnv('SERVICE_EMAIL_PASSWORD'),
+    // corsOrigin: requireProcessEnv('CORS_ORIGIN'),
+    embeddedMongo: process.env.EMBEDDED_MONGO || 'false',
+    // serviceEmailUser: requireProcessEnv('SERVICE_EMAIL_USER'),
+    // serviceEmailPassword: requireProcessEnv('SERVICE_EMAIL_PASSWORD'),
     
     mongo: {
       uri: process.env.MONGODB_URI || 'mongodb://db/server',

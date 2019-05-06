@@ -15,11 +15,11 @@ export default (routes, config) => {
 
   /* istanbul ignore next */
   if (config.env === 'production') {
-    app.set('forceSSLOptions', {
-      enable301Redirects: false,
-      trustXFPHeader: true
-    })
-    app.use(forceSSL)
+    // app.set('forceSSLOptions', {
+    //   enable301Redirects: false,
+    //   trustXFPHeader: true
+    // })
+    // app.use(forceSSL)
   }
 
   app.use(cors({
